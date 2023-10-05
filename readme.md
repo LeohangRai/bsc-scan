@@ -7,7 +7,7 @@ $ yarn install
 ## Running the app
 
 ```bash
-# development
+# production
 $ yarn start
 
 # watch mode
