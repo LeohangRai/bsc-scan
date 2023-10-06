@@ -13,6 +13,10 @@ const walletSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  balance: {
+    type: String,
+    trim: true
+  },
   user_id: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
