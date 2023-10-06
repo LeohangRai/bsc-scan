@@ -1,19 +1,22 @@
-import dotenv from 'dotenv';
-import requestService from './axios.service';
-import { BscScanResponse } from '../../interfaces/bsc-scan-response.interface';
-dotenv.config();
-const API_URL = process.env.BSC_SCAN_API_URL ?? 'https://api.bscscan.com/api';
-const API_KEY = process.env.BSC_SCAN_API_KEY ?? '';
+import { BscScanResponseInterface } from '../../interfaces/bsc-scan-response.interface';
+import { Inject, Service } from 'typedi';
+import { CustomRequest } from './axios.service';
+import { BSC_SCAN_API_KEY, BSC_SCAN_API_URL } from '../../tokens';
 
-class BscScanService {
-  apiUrl = API_URL;
-  apiKey = API_KEY;
-  request = requestService;
+@Service()
+export class BscScanService {
+  @Inject(BSC_SCAN_API_URL)
+  private readonly apiUrl: string;
+
+  @Inject(BSC_SCAN_API_KEY)
+  private readonly apiKey: string;
+
+  constructor(@Inject() private readonly requestService: CustomRequest) {}
 
   async getBalanceOfWalletAddress(address: string) {
     const url = `${this.apiUrl}?module=account&action=balance&apikey=${this.apiKey}&address=${address}`;
-    const response = await this.request.get(url);
-    const data: BscScanResponse = response.data;
+    const response = await this.requestService.get(url);
+    const data: BscScanResponseInterface = response.data;
     if (data.status != '1') {
       console.log(data.result);
       throw new Error(data.result);
@@ -21,5 +24,3 @@ class BscScanService {
     return data;
   }
 }
-
-export default BscScanService;

@@ -1,12 +1,15 @@
+import { Inject, Service } from 'typedi';
 import Wallet from '../models/wallet';
-import BscScanService from './core/bsc-scan.service';
+import { BscScanService } from './core/bsc-scan.service';
 
+@Service()
 class WalletService {
   model = Wallet;
-  bscScanService = new BscScanService();
+  constructor(@Inject() private readonly bscScanService: BscScanService) {}
 
   async getAllWallets() {
     const wallets = await Wallet.find({}).exec();
+    console.log('wallets:', wallets);
     return wallets;
   }
 

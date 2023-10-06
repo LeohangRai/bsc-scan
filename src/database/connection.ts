@@ -1,11 +1,8 @@
-import dotenv from 'dotenv';
-dotenv.config();
 import mongoose from 'mongoose';
-
-const dbUrl = process.env.DB_URI ?? '';
+import { DB_CONFIGS } from '../configs';
 
 function connectDB() {
-  mongoose.connect(dbUrl);
+  mongoose.connect(DB_CONFIGS.URL);
   const database = mongoose.connection;
   database.on('error', (error) => {
     console.log('error:', error);

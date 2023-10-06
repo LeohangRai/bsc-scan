@@ -1,15 +1,22 @@
 import axios, { AxiosRequestConfig } from 'axios';
+import { Service } from 'typedi';
+
 const defaultConfig: AxiosRequestConfig = {
   headers: {
     accept: 'application/json',
     'Content-Type': 'application/json'
   }
 };
-
-class CustomRequest {
-  config: AxiosRequestConfig;
+@Service()
+export class CustomRequest {
+  private config: AxiosRequestConfig;
   constructor(config = defaultConfig) {
     this.config = config;
+  }
+
+  setConfig(config: AxiosRequestConfig) {
+    this.config = config;
+    return this;
   }
 
   get(url: string, config = this.config) {
@@ -32,6 +39,3 @@ class CustomRequest {
     return axios.delete(url, config);
   }
 }
-
-const requestService = new CustomRequest();
-export default requestService;
