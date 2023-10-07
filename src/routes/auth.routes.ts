@@ -7,6 +7,7 @@ import { loginSchema, registerUserSchema } from '../auth/schemas/auth.schema';
 import { UserDocument } from '../models/user';
 import CustomError from '../errors/custom-error';
 import wrapNext from '../middlewares/wrap-next';
+import { authenticateJWT } from '../middlewares/authenticate-jwt';
 
 const router = express.Router();
 
@@ -36,5 +37,8 @@ router.post(
     )(_req, res, next);
   }
 );
+
+router.use(authenticateJWT);
+router.get('/profile', wrapNext(authController.getProfile));
 
 export default router;
