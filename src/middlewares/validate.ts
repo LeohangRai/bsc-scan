@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 import { AnyZodObject, ZodError } from 'zod';
+import wrapNext from './wrap-next';
 
-export const validate =
-  (schema: AnyZodObject) =>
-  async (req: Request, res: Response, next: NextFunction) => {
+export const validate = (schema: AnyZodObject) =>
+  wrapNext(async (req: Request, res: Response, next: NextFunction) => {
     try {
       await schema.parseAsync({
         params: req.params,
@@ -20,4 +20,4 @@ export const validate =
       }
       next(error);
     }
-  };
+  });

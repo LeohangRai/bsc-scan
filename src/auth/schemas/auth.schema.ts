@@ -63,3 +63,14 @@ export const registerUserSchema = object({
     path: ['confirmPassword']
   })
 });
+
+export const loginSchema = object({
+  body: object({
+    username: string({ required_error: 'Username is required' }).regex(
+      /^[a-z][a-z0-9_]{7,19}$/,
+      'Invalid username'
+    ),
+
+    password: string({ required_error: 'Password is required' })
+  })
+});
