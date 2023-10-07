@@ -16,8 +16,15 @@ const userSchema = new mongoose.Schema({
   contact: {
     type: String,
     unique: true,
-    required: true,
     trim: true
+  },
+  gender: {
+    type: String,
+    require: true,
+    trim: true
+  },
+  age: {
+    type: Number
   }
 });
 
