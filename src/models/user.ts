@@ -1,7 +1,20 @@
-import mongoose from 'mongoose';
+import { Document, Model, model, Schema } from 'mongoose';
 import { hashSync, compareSync } from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { SERVER_CONFIGS } from '../configs';
 
-const userSchema = new mongoose.Schema({
+export interface UserDocument extends Document {
+  username: string;
+  email: string;
+  contact: string;
+  gender: string;
+  age: number;
+  password: string;
+
+  isPasswordValid: (password: string) => boolean;
+}
+
+const userSchema = new Schema<UserDocument>({
   username: {
     type: String,
     required: true,
@@ -30,10 +43,27 @@ const userSchema = new mongoose.Schema({
   }
 });
 
-userSchema.methods = {
-  isPasswordValid(password: string) {
-    return compareSync(password, this.password);
-  }
+userSchema.methods.isPasswordValid = function (password: string) {
+  return compareSync(password, this.password);
+};
+
+userSchema.methods.createAuthToken = function () {
+  return jwt.sign(
+    {
+      _id: this._id,
+      username: this.username
+    },
+    SERVER_CONFIGS.JWT_SECRET
+  );
+};
+
+/* serializer definition */
+userSchema.methods.toJSON = function () {
+  return {
+    _id: this._id,
+    username: this.username,
+    token: this.createAuthToken()
+  };
 };
 
 userSchema.pre('save', function (next) {
@@ -43,5 +73,7 @@ userSchema.pre('save', function (next) {
   return next();
 });
 
-const User = mongoose.model('User', userSchema);
-export default User;
+export const User: Model<UserDocument> = model<UserDocument>(
+  'User',
+  userSchema
+);

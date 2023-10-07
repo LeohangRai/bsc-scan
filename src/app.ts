@@ -1,6 +1,8 @@
 import 'reflect-metadata';
 import './helpers/set-bsc-scan-tokens.helper'; // sets api url and api key tokens on the typedi container
 import express, { NextFunction, Request, Response } from 'express';
+import passport from 'passport';
+import './configs/passport';
 import connectDB from './database/connection';
 import authRoutes from './routes/auth.routes';
 import globalErrorHandler from './middlewares/global-error-handler';
@@ -10,6 +12,7 @@ connectDB();
 const app = express();
 
 app.use(express.json());
+app.use(passport.initialize());
 
 app.get('/', (_req: Request, res: Response) => {
   res.send({

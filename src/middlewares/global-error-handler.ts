@@ -7,7 +7,7 @@ export default function (
   res: Response,
   _next: NextFunction
 ) {
-  res.status(error.statusCode || 500).json({
+  return res.status(error.statusCode || 500).json({
     status: error.status || 'error',
     message: error.message
   });

@@ -7,7 +7,8 @@ export const BSC_SCAN_CONFIGS = {
 };
 
 export const SERVER_CONFIGS = {
-  PORT: process.env.SERVER_PORT ?? 3000
+  PORT: process.env.SERVER_PORT ?? 3000,
+  JWT_SECRET: process.env.JWT_SECRET ?? ''
 };
 
 export const DB_CONFIGS = {

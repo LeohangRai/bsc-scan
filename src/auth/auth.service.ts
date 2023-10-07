@@ -1,5 +1,5 @@
 import { Service } from 'typedi';
-import User from '../models/user';
+import { User } from '../models/user';
 import { RegisterUserDto } from './dtos/register-user.dto';
 import { FilterQuery } from 'mongoose';
 
