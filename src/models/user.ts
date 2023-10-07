@@ -1,7 +1,8 @@
-import { Document, Model, model, Schema } from 'mongoose';
+import { Document, FilterQuery, Model, model, Schema } from 'mongoose';
 import { hashSync, compareSync } from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { SERVER_CONFIGS } from '../configs';
+import { UserDataForAuthStrategy } from '../interfaces/user-data-for-auth-strategy.interface';
 
 export interface UserDocument extends Document {
   username: string;
@@ -60,10 +61,27 @@ userSchema.methods.createAuthToken = function () {
 /* serializer definition */
 userSchema.methods.toJSON = function () {
   return {
-    _id: this._id,
     username: this.username,
-    token: this.createAuthToken()
+    email: this.email,
+    contact: this.contact,
+    gender: this.gender,
+    age: this.age
   };
+};
+
+userSchema.statics.findOneForLogin = async function (
+  condition: FilterQuery<UserDocument>
+): Promise<UserDataForAuthStrategy | null> {
+  const user = await this.findOne(condition);
+  if (user) {
+    return {
+      _id: user._id,
+      username: user.username,
+      token: user.createAuthToken(),
+      isPasswordValid: user.isPasswordValid.bind(user)
+    };
+  }
+  return null;
 };
 
 userSchema.pre('save', function (next) {
@@ -73,7 +91,11 @@ userSchema.pre('save', function (next) {
   return next();
 });
 
-export const User: Model<UserDocument> = model<UserDocument>(
+export const User = model<UserDocument>(
   'User',
   userSchema
-);
+) as Model<UserDocument> & {
+  findOneForLogin: (
+    condition: FilterQuery<UserDocument>
+  ) => Promise<UserDataForAuthStrategy | null>;
+};

@@ -7,6 +7,7 @@ import {
 } from 'passport-jwt';
 import { User, UserDocument } from '../models/user';
 import { SERVER_CONFIGS } from '.';
+import { UserDataForAuthStrategy } from '../interfaces/user-data-for-auth-strategy.interface';
 
 const localStrategyOpts: IStrategyOptions = {
   usernameField: 'username',
@@ -15,8 +16,8 @@ const localStrategyOpts: IStrategyOptions = {
 
 passport.use(
   new LocalStrategy(localStrategyOpts, (username, password, done) => {
-    User.findOne({ username })
-      .then((user: UserDocument | null) => {
+    User.findOneForLogin({ username })
+      .then((user: UserDataForAuthStrategy | null) => {
         if (!user?.isPasswordValid(password)) {
           return done(null, false, {
             message: `Invalid username/password`
