@@ -20,16 +20,10 @@ export class AuthService {
     return parsed as Partial<RegisterUserDto>;
   }
 
-  async register({ username, email, contact, gender, age }: RegisterUserDto) {
-    const parsedData = this.parseData({
-      username,
-      email,
-      contact,
-      gender,
-      age
-    });
-    const data = new this.model(parsedData);
-    return data.save();
+  async register(data: RegisterUserDto) {
+    const parsedData = this.parseData(data);
+    const userInstance = new this.model(parsedData);
+    return userInstance.save();
   }
 
   findOneByEmail(email: string) {

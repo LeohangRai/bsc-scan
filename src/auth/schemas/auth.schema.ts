@@ -30,6 +30,14 @@ export const registerUserSchema = object({
       .regex(/^[a-z][a-z0-9_]{7,19}$/, 'Invalid username')
       .refine(isUsernameUnique, { message: 'Username already in use' }),
 
+    password: string({ required_error: 'Password is required' })
+      .min(8, 'Password must be at least 8 characters long')
+      .max(20, 'Password size must not exceed 20 characters'),
+
+    confirmPassword: string({
+      required_error: 'Confirm password is required'
+    }),
+
     email: string({
       required_error: 'Email is required'
     })
@@ -50,5 +58,8 @@ export const registerUserSchema = object({
     age: number({
       invalid_type_error: 'Age must be a number'
     }).optional()
+  }).refine(({ password, confirmPassword }) => password === confirmPassword, {
+    message: 'Password and confirm password do not match',
+    path: ['confirmPassword']
   })
 });
