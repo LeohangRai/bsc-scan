@@ -30,7 +30,7 @@ app.all('*', (req: Request, res: Response, next: NextFunction) => {
   );
 });
 
-/* global error handler */
+/* Global error-handler */
 app.use(globalErrorHandler);
 
 export default app;
