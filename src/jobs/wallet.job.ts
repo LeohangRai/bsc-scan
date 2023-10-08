@@ -1,9 +1,11 @@
-import { WalletService } from '../services/wallet.service';
+import { WalletService } from '../wallets/wallet.service';
 import { Inject, Service } from 'typedi';
 
 @Service()
 export class WalletJob {
-  constructor(@Inject() private readonly walletService: WalletService) {}
+  constructor(@Inject() private readonly walletService: WalletService) {
+    this.updateBalanceOfAllWallets = this.updateBalanceOfAllWallets.bind(this);
+  }
 
   async updateBalanceOfAllWallets() {
     const wallets = await this.walletService.getAllWallets();
