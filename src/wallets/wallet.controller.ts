@@ -9,6 +9,7 @@ export class WalletController {
   constructor(@Inject() private readonly service: WalletService) {
     this.add = this.add.bind(this);
     this.get = this.get.bind(this);
+    this.getOneById = this.getOneById.bind(this);
   }
 
   async add(req: Request, res: Response) {
@@ -31,6 +32,19 @@ export class WalletController {
     return res.status(200).json({
       status: 'success',
       data: wallets
+    });
+  }
+
+  async getOneById(req: Request, res: Response) {
+    const user = req.user as UserDocument;
+    const { id } = req.params;
+    const wallet = await this.service.findOneBy({
+      _id: id,
+      user_id: user.id
+    });
+    return res.status(200).json({
+      status: 'success',
+      data: wallet
     });
   }
 }

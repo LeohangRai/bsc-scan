@@ -1,10 +1,11 @@
 import Container from 'typedi';
 import { object, array, string } from 'zod';
+import { isValidObjectId } from 'mongoose';
 import { WalletService } from '../wallet.service';
 
 const walletService = Container.get(WalletService);
 
-async function areWalletAddressesUnique(addresses: string[]) {
+async function areWalletAddressesUnique(addresses: string[]): Promise<boolean> {
   for (const address of addresses) {
     const wallet = await walletService.findOneBy({ address });
     if (wallet) {
@@ -14,7 +15,7 @@ async function areWalletAddressesUnique(addresses: string[]) {
   return true;
 }
 
-function areElementsUniqueIntheAddressesArray(addresses: string[]) {
+function areElementsUniqueIntheAddressesArray(addresses: string[]): boolean {
   const uniqueElements = new Set();
   for (const address of addresses) {
     if (uniqueElements.has(address)) {
@@ -23,6 +24,10 @@ function areElementsUniqueIntheAddressesArray(addresses: string[]) {
     uniqueElements.add(address);
   }
   return true;
+}
+
+function isValidMongooseObjectId(id: string): boolean {
+  return isValidObjectId(id);
 }
 
 export const addWalletSchema = object({
@@ -40,5 +45,16 @@ export const addWalletSchema = object({
       .refine(areElementsUniqueIntheAddressesArray, {
         message: 'Wallet addresses must be unique'
       })
+  })
+});
+
+export const walletIdParamSchema = object({
+  params: object({
+    id: string({ invalid_type_error: 'Wallet ID must be a string' }).refine(
+      isValidMongooseObjectId,
+      {
+        message: 'Invalid Wallet ID'
+      }
+    )
   })
 });

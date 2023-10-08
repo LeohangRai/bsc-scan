@@ -31,6 +31,7 @@ const walletSchema = new Schema({
 
 walletSchema.methods.toJSON = function () {
   return {
+    _id: this._id,
     address: this.address,
     name_tag: this.name_tag,
     balance: this.balance
