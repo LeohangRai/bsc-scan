@@ -4,7 +4,8 @@ import { WalletController } from '../wallets/wallet.controller';
 import {
   addWalletSchema,
   updateWalletSchema,
-  walletIdParamSchema
+  walletIdParamSchema,
+  walletTrendQuerySchema
 } from '../wallets/schemas/wallet.schema';
 import wrapNext from '../middlewares/wrap-next';
 import { validate } from '../middlewares/validate';
@@ -33,5 +34,10 @@ router.delete(
   validate(walletIdParamSchema),
   wrapNext(walletController.delete)
 );
-
+router.get(
+  '/trends/:id',
+  validate(walletIdParamSchema),
+  validate(walletTrendQuerySchema),
+  wrapNext(walletController.getWalletBalanceTrend)
+);
 export default router;

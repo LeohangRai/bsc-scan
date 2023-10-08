@@ -48,6 +48,10 @@ function isValidMongooseObjectId(id: string): boolean {
   return isValidObjectId(id);
 }
 
+function isValidWalletTrendType(type: string): boolean {
+  return ['daily', 'weekly', 'monthly'].includes(type);
+}
+
 export const addWalletSchema = object({
   body: object({
     walletAddresses: array(string(), {
@@ -86,6 +90,17 @@ export const updateWalletSchema = object({
       .optional(),
     name_tag: string()
       .refine(isNameTagUnique, { message: 'Name tag must be unique' })
+      .optional()
+  })
+});
+
+export const walletTrendQuerySchema = object({
+  query: object({
+    type: string()
+      .toLowerCase()
+      .refine(isValidWalletTrendType, {
+        message: "Type must be either 'daily', 'weekly' or 'montly'"
+      })
       .optional()
   })
 });
