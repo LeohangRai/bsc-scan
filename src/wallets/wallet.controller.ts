@@ -8,6 +8,7 @@ import { UserDocument } from '../models/user';
 export class WalletController {
   constructor(@Inject() private readonly service: WalletService) {
     this.add = this.add.bind(this);
+    this.get = this.get.bind(this);
   }
 
   async add(req: Request, res: Response) {
@@ -19,6 +20,15 @@ export class WalletController {
       user
     );
     return res.status(201).json({
+      status: 'success',
+      data: wallets
+    });
+  }
+
+  async get(req: Request, res: Response) {
+    const user = req.user as UserDocument;
+    const wallets = await this.service.getWalletsByUserId(user._id);
+    return res.status(200).json({
       status: 'success',
       data: wallets
     });

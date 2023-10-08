@@ -20,6 +20,10 @@ export class WalletService {
     return this.model.findOne(condition).exec();
   }
 
+  getWalletsByUserId(user_id: string) {
+    return this.model.find({ user_id }).exec();
+  }
+
   getBalanceDataOfWalletAddr(address: string) {
     return this.bscScanService.getBalanceOfWalletAddress(address);
   }

@@ -11,6 +11,7 @@ const router = express.Router();
 const walletController = Container.get(WalletController);
 
 router.use(authenticateJWT);
+router.get('/', wrapNext(walletController.get));
 router.post('/', validate(addWalletSchema), wrapNext(walletController.add));
 
 export default router;

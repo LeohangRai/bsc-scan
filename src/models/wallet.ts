@@ -29,5 +29,13 @@ const walletSchema = new Schema({
   }
 });
 
+walletSchema.methods.toJSON = function () {
+  return {
+    address: this.address,
+    name_tag: this.name_tag,
+    balance: this.balance
+  };
+};
+
 const Wallet = model<WalletDocument>('Wallet', walletSchema);
 export default Wallet;
