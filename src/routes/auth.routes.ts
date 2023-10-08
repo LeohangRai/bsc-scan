@@ -3,7 +3,11 @@ import passport from 'passport';
 import Container from 'typedi';
 import { AuthController } from '../auth/auth.controller';
 import { validate } from '../middlewares/validate';
-import { loginSchema, registerUserSchema } from '../auth/schemas/auth.schema';
+import {
+  loginSchema,
+  registerUserSchema,
+  updateProfileSchema
+} from '../auth/schemas/auth.schema';
 import { UserDocument } from '../models/user';
 import CustomError from '../errors/custom-error';
 import wrapNext from '../middlewares/wrap-next';
@@ -40,5 +44,10 @@ router.post(
 
 router.use(authenticateJWT);
 router.get('/profile', wrapNext(authController.getProfile));
+router.patch(
+  '/profile',
+  validate(updateProfileSchema),
+  wrapNext(authController.updateProfile)
+);
 
 export default router;

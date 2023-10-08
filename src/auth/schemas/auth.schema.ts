@@ -74,3 +74,34 @@ export const loginSchema = object({
     password: string({ required_error: 'Password is required' })
   })
 });
+
+export const updateProfileSchema = object({
+  body: object({
+    username: string()
+      .min(8, 'Username must have at least 8 characters')
+      .max(20, 'Username should not exceed 20 characters')
+      .regex(/^[a-z][a-z0-9_]{7,19}$/, 'Invalid username')
+      .refine(isUsernameUnique, { message: 'Username already in use' })
+      .optional(),
+
+    email: string()
+      .email()
+      .refine(isEmailUnique, { message: 'Email already in use' })
+      .optional(),
+
+    contact: string()
+      .regex(/^\d{6,20}$/, 'Invalid contact number')
+      .refine(isContactUnique, { message: 'Contact number already in use' })
+      .optional(),
+
+    gender: string()
+      .refine(isGenderValid, {
+        message: `Gender must be either 'Male', 'Female' or 'Others'`
+      })
+      .optional(),
+
+    age: number({
+      invalid_type_error: 'Age must be a number'
+    }).optional()
+  })
+});
