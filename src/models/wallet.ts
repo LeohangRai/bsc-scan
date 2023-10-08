@@ -1,6 +1,13 @@
-import mongoose from 'mongoose';
+import { Document, model, Schema } from 'mongoose';
 
-const walletSchema = new mongoose.Schema({
+export interface WalletDocument extends Document {
+  address: string;
+  name_tag?: string;
+  balance: string;
+  user_id: Schema.Types.ObjectId;
+}
+
+const walletSchema = new Schema({
   address: {
     type: String,
     required: true,
@@ -9,8 +16,6 @@ const walletSchema = new mongoose.Schema({
   },
   name_tag: {
     type: String,
-    unique: true,
-    required: true,
     trim: true
   },
   balance: {
@@ -18,11 +23,11 @@ const walletSchema = new mongoose.Schema({
     trim: true
   },
   user_id: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     required: true,
     ref: 'User'
   }
 });
 
-const Wallet = mongoose.model('Wallet', walletSchema);
+const Wallet = model<WalletDocument>('Wallet', walletSchema);
 export default Wallet;

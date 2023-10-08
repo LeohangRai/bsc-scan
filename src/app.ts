@@ -5,6 +5,7 @@ import passport from 'passport';
 import './configs/passport';
 import connectDB from './database/connection';
 import authRoutes from './routes/auth.routes';
+import walletRoutes from './routes/wallet.routes';
 import globalErrorHandler from './middlewares/global-error-handler';
 import CustomError from './errors/custom-error';
 
@@ -22,6 +23,7 @@ app.get('/', (_req: Request, res: Response) => {
 });
 
 app.use('/auth', authRoutes);
+app.use('/wallets', walletRoutes);
 
 /* unhandled routes */
 app.all('*', (req: Request, res: Response, next: NextFunction) => {

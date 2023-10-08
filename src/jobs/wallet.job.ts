@@ -1,4 +1,4 @@
-import { WalletService } from '../services/wallet.service';
+import { WalletService } from '../wallets/wallet.service';
 import { Inject, Service } from 'typedi';
 
 @Service()

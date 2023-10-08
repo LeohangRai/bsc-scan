@@ -1,7 +1,10 @@
 import { Inject, Service } from 'typedi';
-import Wallet from '../models/wallet';
+import Wallet, { WalletDocument } from '../models/wallet';
 import { WalletBalanceHistory } from '../models/wallet-balance-history';
-import { BscScanService } from './core/bsc-scan.service';
+import { BscScanService } from '../services/core/bsc-scan.service';
+import { UserDocument } from '../models/user';
+import CustomError from '../errors/custom-error';
+import { FilterQuery } from 'mongoose';
 
 @Service()
 export class WalletService {
@@ -13,8 +16,37 @@ export class WalletService {
     return this.model.find({}).exec();
   }
 
+  findOneBy(condition: FilterQuery<WalletDocument>) {
+    return this.model.findOne(condition).exec();
+  }
+
   getBalanceDataOfWalletAddr(address: string) {
     return this.bscScanService.getBalanceOfWalletAddress(address);
+  }
+
+  async addWalletAddresses(addresses: string[], user: UserDocument) {
+    const wallets: { address: string; balance: string; user_id: number }[] = [];
+    try {
+      for (const address of addresses) {
+        const { result } = await this.getBalanceDataOfWalletAddr(address);
+        wallets.push({
+          address,
+          balance: result,
+          user_id: user._id
+        });
+      }
+      return this.model.insertMany(wallets);
+    } catch (error) {
+      if (error instanceof CustomError) {
+        if (error.message == 'Error! Invalid address format') {
+          throw new CustomError(
+            400,
+            'One or more of the addresses you provided are invalid.'
+          );
+        }
+      }
+      throw error;
+    }
   }
 
   async updateBalanceDatOfWalletId(id: string, balance: string) {
