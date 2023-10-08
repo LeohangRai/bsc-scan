@@ -91,6 +91,16 @@ userSchema.pre('save', function (next) {
   return next();
 });
 
+userSchema.pre('insertMany', function (next, results) {
+  results.map((result: UserDocument) => {
+    if (result.password) {
+      result.password = hashSync(result.password ?? '', 10);
+    }
+    return result;
+  });
+  return next();
+});
+
 export const User = model<UserDocument>(
   'User',
   userSchema
