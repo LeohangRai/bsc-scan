@@ -38,10 +38,12 @@ const jwtStrategyOptions: JWTStrategyOptions = {
 
 passport.use(
   new JWTStrategy(jwtStrategyOptions, (jwtPayload, done) => {
-    User.findOne({ username: jwtPayload.username })
+    User.findOne({ _id: jwtPayload._id })
       .then((user: UserDocument | null) => {
         if (!user) {
-          return done(null, false, 'Invalid token');
+          return done(null, false, {
+            message: 'Invalid token'
+          });
         }
         return done(null, user, jwtPayload);
       })

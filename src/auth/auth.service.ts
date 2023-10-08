@@ -2,6 +2,7 @@ import { Service } from 'typedi';
 import { User } from '../models/user';
 import { RegisterUserDto } from './dtos/register-user.dto';
 import { FilterQuery } from 'mongoose';
+import { UpdateProfileDto } from './dtos/update-profile.dto';
 
 @Service()
 export class AuthService {
@@ -32,5 +33,16 @@ export class AuthService {
 
   findOneBy(condition: FilterQuery<typeof User>) {
     return this.model.findOne(condition).exec();
+  }
+
+  async updateProfile(id: string, payload: UpdateProfileDto) {
+    const parsedData = this.parseData(payload);
+    const newProfile = await this.model
+      .findOneAndUpdate({ _id: id }, parsedData, {
+        new: true
+      })
+      .exec();
+    /* because 'findOneAndUpdate()' returns the original document by default. */
+    return newProfile?.toJSON();
   }
 }
