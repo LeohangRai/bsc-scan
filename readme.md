@@ -4,7 +4,17 @@
 $ yarn install
 ```
 
-## Running the app
+### Seeding Data
+```bash
+$ yarn seed
+```
+
+### Running the Scheduler
+```bash
+$ yarn jobs:run
+```
+
+## Running the application server
 
 ```bash
 # production
