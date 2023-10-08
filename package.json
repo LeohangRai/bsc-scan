@@ -9,9 +9,10 @@
     "prepare": "husky install",
     "precommit": "lint-staged && npm run lint:fix",
     "prepush": "npm run lint",
+    "seed": "ts-node src/database/seeder.ts",
+    "jobs:run": "ts-node src/scheduler.ts",
     "start": "yarn build && node dist/server.js",
-    "start:dev": "npx nodemon",
-    "seed": "ts-node src/database/seeder.ts"
+    "start:dev": "npx nodemon"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [

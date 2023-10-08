@@ -7,7 +7,7 @@ import { WalletJob } from './jobs/wallet.job';
 
 connectDB();
 const walletJob = Container.get(WalletJob);
-const job = cron.schedule('*/10 * * * * *', function () {
+const job = cron.schedule('*/5 * * * *', function () {
   walletJob
     .updateBalanceOfAllWallets()
     .then(() => {
