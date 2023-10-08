@@ -3,6 +3,7 @@ import Container from 'typedi';
 import { WalletController } from '../wallets/wallet.controller';
 import {
   addWalletSchema,
+  updateWalletSchema,
   walletIdParamSchema
 } from '../wallets/schemas/wallet.schema';
 import wrapNext from '../middlewares/wrap-next';
@@ -20,6 +21,12 @@ router.get(
   '/:id',
   validate(walletIdParamSchema),
   wrapNext(walletController.getOneById)
+);
+router.patch(
+  '/:id',
+  validate(walletIdParamSchema),
+  validate(updateWalletSchema),
+  wrapNext(walletController.updateOneById)
 );
 
 export default router;

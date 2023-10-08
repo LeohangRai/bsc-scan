@@ -1,5 +1,5 @@
 {
-  "name": "vg-task",
+  "name": "bsc-scan",
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {

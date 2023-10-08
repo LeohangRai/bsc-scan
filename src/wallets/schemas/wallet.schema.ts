@@ -5,6 +5,24 @@ import { WalletService } from '../wallet.service';
 
 const walletService = Container.get(WalletService);
 
+async function isWalletAddressUnique(address: string): Promise<boolean> {
+  const wallet = await walletService.findOneBy({ address });
+  if (wallet) {
+    return false;
+  }
+  return true;
+}
+
+async function isNameTagUnique(name_tag: string): Promise<boolean> {
+  const wallet = await walletService.findOneBy({
+    name_tag
+  });
+  if (wallet) {
+    return false;
+  }
+  return true;
+}
+
 async function areWalletAddressesUnique(addresses: string[]): Promise<boolean> {
   for (const address of addresses) {
     const wallet = await walletService.findOneBy({ address });
@@ -56,5 +74,18 @@ export const walletIdParamSchema = object({
         message: 'Invalid Wallet ID'
       }
     )
+  })
+});
+
+export const updateWalletSchema = object({
+  body: object({
+    address: string()
+      .refine(isWalletAddressUnique, {
+        message: 'Wallet address must be unique'
+      })
+      .optional(),
+    name_tag: string()
+      .refine(isNameTagUnique, { message: 'Name tag must be unique' })
+      .optional()
   })
 });

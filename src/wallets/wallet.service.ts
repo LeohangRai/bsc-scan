@@ -5,6 +5,7 @@ import { BscScanService } from '../services/core/bsc-scan.service';
 import { UserDocument } from '../models/user';
 import CustomError from '../errors/custom-error';
 import { FilterQuery } from 'mongoose';
+import { UpdateWalletDto } from './dtos/update-wallet.dto';
 
 @Service()
 export class WalletService {
@@ -51,6 +52,21 @@ export class WalletService {
       }
       throw error;
     }
+  }
+
+  async updateWalletById(id: string, userId: string, payload: UpdateWalletDto) {
+    const wallet = await this.model
+      .findOne({
+        _id: id,
+        user_id: userId
+      })
+      .exec();
+    if (!wallet) {
+      throw new CustomError(404, 'Wallet not found');
+    }
+    wallet.address = payload.address ? payload.address : wallet.address;
+    wallet.name_tag = payload.name_tag ? payload.name_tag : wallet.name_tag;
+    return wallet.save();
   }
 
   async updateBalanceDatOfWalletId(id: string, balance: string) {
