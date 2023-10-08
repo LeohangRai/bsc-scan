@@ -6,6 +6,7 @@ import { UserDocument } from '../models/user';
 import CustomError from '../errors/custom-error';
 import { FilterQuery } from 'mongoose';
 import { UpdateWalletDto } from './dtos/update-wallet.dto';
+import { WalletTrendType } from './types/wallet.trend.types';
 
 @Service()
 export class WalletService {
@@ -120,5 +121,38 @@ export class WalletService {
       throw new CustomError(403, 'Unauthorized');
     }
     return wallet.deleteOne();
+  }
+
+  async getWalletBalanceTrend(
+    id: string,
+    userId: string,
+    type: WalletTrendType = 'daily'
+  ) {
+    const wallet = await this.model
+      .findOne({
+        _id: id
+      })
+      .exec();
+    if (!wallet) {
+      throw new CustomError(404, 'Wallet not found');
+    }
+    if (userId != String(wallet.user_id)) {
+      throw new CustomError(403, 'Unauthorized');
+    }
+    switch (type) {
+      case 'monthly':
+        return this.walletBalanceHistoryModel.getMonthlyAddressBalanceChange(
+          wallet.address
+        );
+      case 'weekly':
+        return this.walletBalanceHistoryModel.getWeeklyAddressBalanceChange(
+          wallet.address
+        );
+      case 'daily':
+      default:
+        return this.walletBalanceHistoryModel.getDailyAddressBalanceChange(
+          wallet.address
+        );
+    }
   }
 }

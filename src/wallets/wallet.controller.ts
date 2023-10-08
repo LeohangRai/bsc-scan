@@ -4,6 +4,7 @@ import { Request, Response } from 'express';
 import { AddWalletsDto } from './dtos/add-wallets.dto';
 import { UserDocument } from '../models/user';
 import { UpdateWalletDto } from './dtos/update-wallet.dto';
+import { GetWalletTrendDto } from './dtos/get-wallet-trend.dto';
 
 @Service()
 export class WalletController {
@@ -13,6 +14,7 @@ export class WalletController {
     this.getOneById = this.getOneById.bind(this);
     this.updateOneById = this.updateOneById.bind(this);
     this.delete = this.delete.bind(this);
+    this.getWalletBalanceTrend = this.getWalletBalanceTrend.bind(this);
   }
 
   async add(req: Request, res: Response) {
@@ -66,6 +68,21 @@ export class WalletController {
     return res.status(200).json({
       status: 'success',
       data: wallet
+    });
+  }
+
+  async getWalletBalanceTrend(req: Request, res: Response) {
+    const user = req.user as UserDocument;
+    const { id } = req.params;
+    const { type } = req.query as GetWalletTrendDto;
+    const trendData = await this.service.getWalletBalanceTrend(
+      id,
+      user._id,
+      type
+    );
+    return res.status(200).json({
+      status: 'success',
+      data: trendData
     });
   }
 }
