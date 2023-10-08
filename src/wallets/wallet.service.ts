@@ -54,15 +54,33 @@ export class WalletService {
     }
   }
 
+  async getOneById(id: string, userId: string) {
+    const wallet = await this.model
+      .findOne({
+        _id: id
+      })
+      .lean()
+      .exec();
+    if (!wallet) {
+      throw new CustomError(404, 'Wallet not found');
+    }
+    if (userId != String(wallet.user_id)) {
+      throw new CustomError(403, 'Unauthorized');
+    }
+    return wallet;
+  }
+
   async updateWalletById(id: string, userId: string, payload: UpdateWalletDto) {
     const wallet = await this.model
       .findOne({
-        _id: id,
-        user_id: userId
+        _id: id
       })
       .exec();
     if (!wallet) {
       throw new CustomError(404, 'Wallet not found');
+    }
+    if (userId != String(wallet.user_id)) {
+      throw new CustomError(403, 'Unauthorized');
     }
     wallet.address = payload.address ? payload.address : wallet.address;
     wallet.name_tag = payload.name_tag ? payload.name_tag : wallet.name_tag;
@@ -87,5 +105,20 @@ export class WalletService {
       await data.save();
     }
     return updatedWallet;
+  }
+
+  async delete(id: string, userId: string) {
+    const wallet = await this.model
+      .findOne({
+        _id: id
+      })
+      .exec();
+    if (!wallet) {
+      throw new CustomError(404, 'Wallet not found');
+    }
+    if (userId != String(wallet.user_id)) {
+      throw new CustomError(403, 'Unauthorized');
+    }
+    return wallet.deleteOne();
   }
 }

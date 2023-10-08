@@ -28,5 +28,10 @@ router.patch(
   validate(updateWalletSchema),
   wrapNext(walletController.updateOneById)
 );
+router.delete(
+  '/:id',
+  validate(walletIdParamSchema),
+  wrapNext(walletController.delete)
+);
 
 export default router;

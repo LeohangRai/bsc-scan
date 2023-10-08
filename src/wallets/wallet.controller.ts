@@ -12,6 +12,7 @@ export class WalletController {
     this.get = this.get.bind(this);
     this.getOneById = this.getOneById.bind(this);
     this.updateOneById = this.updateOneById.bind(this);
+    this.delete = this.delete.bind(this);
   }
 
   async add(req: Request, res: Response) {
@@ -40,10 +41,7 @@ export class WalletController {
   async getOneById(req: Request, res: Response) {
     const user = req.user as UserDocument;
     const { id } = req.params;
-    const wallet = await this.service.findOneBy({
-      _id: id,
-      user_id: user.id
-    });
+    const wallet = await this.service.getOneById(id, user._id);
     return res.status(200).json({
       status: 'success',
       data: wallet
@@ -55,6 +53,16 @@ export class WalletController {
     const payload = req.body as UpdateWalletDto;
     const { id } = req.params;
     const wallet = await this.service.updateWalletById(id, user._id, payload);
+    return res.status(200).json({
+      status: 'success',
+      data: wallet
+    });
+  }
+
+  async delete(req: Request, res: Response) {
+    const user = req.user as UserDocument;
+    const { id } = req.params;
+    const wallet = await this.service.delete(id, user._id);
     return res.status(200).json({
       status: 'success',
       data: wallet
