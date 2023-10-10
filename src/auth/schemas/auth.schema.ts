@@ -22,6 +22,52 @@ function isGenderValid(value: string): boolean {
 }
 
 const authService = Container.get(AuthService);
+
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     RegisterUserInput:
+ *       type: object
+ *       required: ['username', 'email', 'password', 'confirmPassword']
+ *       properties:
+ *         username:
+ *           type: string
+ *           default: ginger_cat7
+ *         email:
+ *           type: string
+ *           default: gingercat7@gmail.com
+ *         password:
+ *           type: string
+ *           default: ninja_ginger_cat
+ *         confirmPassword:
+ *           type: string
+ *           default: ninja_ginger_cat
+ *         contact:
+ *           type: string
+ *         gender:
+ *           type: string
+ *         age:
+ *           type: number
+ *     RegisterUserResponse:
+ *       type: object
+ *       properties:
+ *         status:
+ *           type: string
+ *         data:
+ *           type: object
+ *           properties:
+ *             username:
+ *               type: string
+ *             email:
+ *               type: string
+ *             contact:
+ *               type: string
+ *             gender:
+ *               type: string
+ *             age:
+ *               type: number
+ */
 export const registerUserSchema = object({
   body: object({
     username: string({ required_error: 'Username is required' })

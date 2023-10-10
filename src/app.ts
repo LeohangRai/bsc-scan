@@ -8,6 +8,7 @@ import authRoutes from './routes/auth.routes';
 import walletRoutes from './routes/wallet.routes';
 import globalErrorHandler from './middlewares/global-error-handler';
 import CustomError from './errors/custom-error';
+import swaggerDocs from './configs/swagger';
 
 connectDB();
 const app = express();
@@ -22,8 +23,24 @@ app.get('/', (_req: Request, res: Response) => {
   });
 });
 
+/**
+ * @openapi
+ * /health:
+ *   get:
+ *     tags:
+ *       - Healthcheck
+ *     description: Responds if the app is up and running
+ *     responses:
+ *       '200':
+ *         description: App is up and running
+ */
+app.get('/health', (_req: Request, res: Response) => {
+  res.sendStatus(200);
+});
+
 app.use('/auth', authRoutes);
 app.use('/wallets', walletRoutes);
+swaggerDocs(app);
 
 /* unhandled routes */
 app.all('*', (req: Request, res: Response, next: NextFunction) => {

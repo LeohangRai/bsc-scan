@@ -16,6 +16,31 @@ import { authenticateJWT } from '../middlewares/authenticate-jwt';
 const router = express.Router();
 
 const authController = Container.get(AuthController);
+
+/**
+ * @openapi
+ *   /auth/register:
+ *     post:
+ *       tags: ['Auth']
+ *       summary: Register a user
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/RegisterUserInput'
+ *       responses:
+ *         200:
+ *           description: Success
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/RegisterUserResponse'
+ *         422:
+ *           description: Unprocessable entity error
+ *         400:
+ *           description: Bad request
+ */
 router.post(
   '/register',
   validate(registerUserSchema),
