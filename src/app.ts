@@ -16,9 +16,31 @@ const app = express();
 app.use(express.json());
 app.use(passport.initialize());
 
+/**
+ * @openapi
+ * /:
+ *   get:
+ *     tags:
+ *       - health-check
+ *     description: Responds with a Hello World message
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   default: success
+ *                 message:
+ *                   type: string
+ *                   default: 'Hello world!'
+ */
 app.get('/', (_req: Request, res: Response) => {
   res.send({
-    status: 200,
+    status: 'success',
     message: 'Hello world!'
   });
 });
@@ -31,7 +53,7 @@ app.get('/', (_req: Request, res: Response) => {
  *       - health-check
  *     description: Responds if the app is up and running
  *     responses:
- *       '200':
+ *       200:
  *         description: App is up and running
  */
 app.get('/health', (_req: Request, res: Response) => {
