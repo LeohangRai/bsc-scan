@@ -110,6 +110,27 @@ export const registerUserSchema = object({
   })
 });
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     LoginInput:
+ *       type: object
+ *       properties:
+ *         username:
+ *           type: string
+ *           default: ''
+ *         password:
+ *           type: string
+ *           default: ''
+ *     LoginResponse:
+ *       type: object
+ *       properties:
+ *         username:
+ *           type: string
+ *         token:
+ *           type: string
+ */
 export const loginSchema = object({
   body: object({
     username: string({ required_error: 'Username is required' }).regex(
@@ -121,6 +142,44 @@ export const loginSchema = object({
   })
 });
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     UpdateProfileInput:
+ *       type: object
+ *       properties:
+ *         username:
+ *           type: string
+ *           default: ginger_cat
+ *         email:
+ *           type: string
+ *           default: gingercat@gmail.com
+ *         contact:
+ *           type: string
+ *         gender:
+ *           type: string
+ *         age:
+ *           type: number
+ *     ProfileResponse:
+ *       type: object
+ *       properties:
+ *         status:
+ *           type: string
+ *         data:
+ *           type: object
+ *           properties:
+ *             username:
+ *               type: string
+ *             email:
+ *               type: string
+ *             contact:
+ *               type: string
+ *             gender:
+ *               type: string
+ *             age:
+ *               type: number
+ */
 export const updateProfileSchema = object({
   body: object({
     username: string()

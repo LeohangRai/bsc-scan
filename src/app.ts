@@ -28,7 +28,7 @@ app.get('/', (_req: Request, res: Response) => {
  * /health:
  *   get:
  *     tags:
- *       - Healthcheck
+ *       - health-check
  *     description: Responds if the app is up and running
  *     responses:
  *       '200':
