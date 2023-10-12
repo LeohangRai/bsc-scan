@@ -24,7 +24,7 @@ app.use(passport.initialize());
  *       - health-check
  *     description: Responds with a Hello World message
  *     responses:
- *       200:
+ *       '200':
  *         description: Success
  *         content:
  *           application/json:
@@ -51,7 +51,7 @@ app.get('/', (_req: Request, res: Response) => {
  *   get:
  *     tags:
  *       - health-check
- *     description: Responds if the app is up and running
+ *     description: Responds with status 200 if the app is up and running
  *     responses:
  *       200:
  *         description: App is up and running

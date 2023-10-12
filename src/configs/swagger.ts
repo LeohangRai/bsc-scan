@@ -23,7 +23,21 @@ const options: swaggerJSDoc.Options = {
           bearerAuth: []
         }
       ]
-    }
+    },
+    tags: [
+      {
+        name: 'health-check',
+        description: 'Server health check operations'
+      },
+      {
+        name: 'auth',
+        description: 'User authentication operations'
+      },
+      {
+        name: 'wallets',
+        description: 'Wallet Operations'
+      }
+    ]
   },
   apis: ['./src/app.ts', './src/*/schemas/*.ts', './src/routes/*.ts']
 };
