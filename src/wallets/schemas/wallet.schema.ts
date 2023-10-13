@@ -52,6 +52,19 @@ function isValidWalletTrendType(type: string): boolean {
   return ['daily', 'weekly', 'monthly'].includes(type);
 }
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     AddWalletsInput:
+ *       type: object
+ *       properties:
+ *         walletAddresses:
+ *           type: array
+ *           items:
+ *             type: string
+ *           example: ['0xe2e912F0b1b5961be7CB0D6dbb4A920ACe06Cd99', '0x3c783c21a0383057D128bae431894a5C19F9Cf06']
+ */
 export const addWalletSchema = object({
   body: object({
     walletAddresses: array(string(), {
@@ -81,6 +94,20 @@ export const walletIdParamSchema = object({
   })
 });
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     UpdateWalletInput:
+ *       type: object
+ *       properties:
+ *         address:
+ *           type: string
+ *           default: ''
+ *         name_tag:
+ *           type: string
+ *           default: ''
+ */
 export const updateWalletSchema = object({
   body: object({
     address: string()
@@ -94,13 +121,85 @@ export const updateWalletSchema = object({
   })
 });
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     WalletTrendType:
+ *       type: string
+ *       default: 'daily'
+ *       enum:
+ *         - daily
+ *         - weekly
+ *         - monthly
+ */
 export const walletTrendQuerySchema = object({
   query: object({
     type: string()
       .toLowerCase()
       .refine(isValidWalletTrendType, {
-        message: "Type must be either 'daily', 'weekly' or 'montly'"
+        message: "Type must be either 'daily', 'weekly' or 'monthly'"
       })
       .optional()
   })
 });
+
+/**
+ * @openapi
+ *   components:
+ *     schemas:
+ *       Wallet:
+ *         type: object
+ *         properties:
+ *           address:
+ *             type: string
+ *             example: '0x8894E0a0c962CB723c1976a4421c95949bE2D4E3'
+ *           name_tag:
+ *             type: string
+ *             example: 'Binance: Hot Wallet 6'
+ *           balance:
+ *             type: string
+ *             example: '310278092763093082470656'
+ *             readonly: true
+ *     responses:
+ *       WalletPostAndGetResponse:
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   default: success
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Wallet'
+ *       SingleWalletResponse:
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   default: success
+ *                 data:
+ *                   $ref: '#/components/schemas/Wallet'
+ *       WalletTrendResponse:
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   default: success
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ */

@@ -16,12 +16,53 @@ import { authenticateJWT } from '../middlewares/authenticate-jwt';
 const router = express.Router();
 
 const authController = Container.get(AuthController);
+
+/**
+ * @openapi
+ *   /auth/register:
+ *     post:
+ *       tags: ['auth']
+ *       summary: Register a user
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/RegisterUserInput'
+ *       responses:
+ *         200:
+ *           description: Success
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/RegisterUserResponse'
+ */
 router.post(
   '/register',
   validate(registerUserSchema),
   wrapNext(authController.register)
 );
 
+/**
+ * @openapi
+ *   /auth/login:
+ *     post:
+ *       tags: ['auth']
+ *       summary: User login
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/LoginInput'
+ *       responses:
+ *         200:
+ *           description: Success
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/LoginResponse'
+ */
 router.post(
   '/login',
   validate(loginSchema),
@@ -43,7 +84,47 @@ router.post(
 );
 
 router.use(authenticateJWT);
+
+/**
+ * @openapi
+ *   /auth/profile:
+ *     get:
+ *       tags: ['auth']
+ *       summary: Get profile
+ *       security:
+ *         - bearerAuth: []
+ *       responses:
+ *         200:
+ *           description: Success
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/ProfileResponse'
+ */
 router.get('/profile', wrapNext(authController.getProfile));
+
+/**
+ * @openapi
+ *   /auth/profile:
+ *     patch:
+ *       tags: ['auth']
+ *       summary: Update profile
+ *       security:
+ *         - bearerAuth: []
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UpdateProfileInput'
+ *       responses:
+ *         '200':
+ *           description: Success
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/ProfileResponse'
+ */
 router.patch(
   '/profile',
   validate(updateProfileSchema),
