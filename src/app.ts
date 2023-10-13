@@ -8,7 +8,7 @@ import authRoutes from './routes/auth.routes';
 import walletRoutes from './routes/wallet.routes';
 import globalErrorHandler from './middlewares/global-error-handler';
 import CustomError from './errors/custom-error';
-import swaggerDocs from './configs/swagger';
+import swaggerDocs from './middlewares/swagger';
 
 connectDB();
 const app = express();
