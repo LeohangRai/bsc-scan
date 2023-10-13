@@ -63,7 +63,12 @@ router.post('/', validate(addWalletSchema), wrapNext(walletController.add));
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - $ref: '#/components/parameters/WalletIdParameter'
+ *       - name: walletId
+ *         in: path
+ *         desccription: ID of the wallet to fetch
+ *         required: true
+ *         schema:
+ *           type: string
  *     responses:
  *       '200':
  *         $ref: '#/components/responses/SingleWalletResponse'
@@ -84,7 +89,12 @@ router.get(
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - $ref: '#/components/parameters/WalletIdParameter'
+ *       - name: walletId
+ *         in: path
+ *         description: ID of the wallet to update
+ *         required: true
+ *         schema:
+ *           type: string
  *     requestBody:
  *       required: true
  *       content:
@@ -112,7 +122,12 @@ router.patch(
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - $ref: '#/components/parameters/WalletIdParameter'
+ *       - name: walletId
+ *         in: path
+ *         description: ID of the wallet to delete
+ *         required: true
+ *         schema:
+ *           type: string
  *     responses:
  *       '200':
  *         $ref: '#/components/responses/SingleWalletResponse'
@@ -133,8 +148,21 @@ router.delete(
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - $ref: '#/components/parameters/WalletIdParameter'
- *       - $ref: '#/components/parameters/TrendTypeParameter'
+ *       - name: walletId
+ *         in: path
+ *         description: ID of the wallet
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - name: type
+ *         in: query
+ *         description: Type of trend, either 'daily', 'weekly' or 'monthly'
+ *         required: false
+ *         schema:
+ *           $ref: '#/components/schemas/WalletTrendType'
+ *     responses:
+ *       '200':
+ *         $ref: '#/components/responses/WalletTrendResponse'
  */
 router.get(
   '/trends/:id',

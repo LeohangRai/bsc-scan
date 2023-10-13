@@ -83,20 +83,6 @@ export const addWalletSchema = object({
   })
 });
 
-/**
- * @openapi
- * components:
- *   schemas:
- *     WalletId:
- *       type: string
- *   parameters:
- *     WalletIdParameter:
- *       in: path
- *       description: ID of the wallet
- *       required: true
- *       schema:
- *         $ref: '#/components/schemas/WalletId'
- */
 export const walletIdParamSchema = object({
   params: object({
     id: string({ invalid_type_error: 'Wallet ID must be a string' }).refine(
@@ -139,20 +125,13 @@ export const updateWalletSchema = object({
  * @openapi
  * components:
  *   schemas:
- *     WalletType:
+ *     WalletTrendType:
  *       type: string
  *       default: 'daily'
  *       enum:
  *         - daily
  *         - weekly
  *         - monthly
- *   parameters:
- *     TrendTypeParameter:
- *       in: query
- *       description: Type of trend either 'daily', 'weekly' or 'monthly'
- *       required: false
- *       schema:
- *         $ref: '#/components/schemas/WalletType'
  */
 export const walletTrendQuerySchema = object({
   query: object({
@@ -209,4 +188,18 @@ export const walletTrendQuerySchema = object({
  *                   default: success
  *                 data:
  *                   $ref: '#/components/schemas/Wallet'
+ *       WalletTrendResponse:
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   default: success
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
  */
